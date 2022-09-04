@@ -1,37 +1,35 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Overlay, ModalWindows } from './Modal.styled';
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+export function Modal({ modalImage, toggleModal }) {
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentDidUnMount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); /* eslint-disable-line*/
 
-  handleKeyDown = e => {
+  const handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.toggleModal();
+      toggleModal();
     }
   };
 
-  handleBackDropClick = e => {
+  const handleBackDropClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.toggleModal();
+      toggleModal();
     }
   };
 
-  render() {
-    return (
-      <Overlay onClick={this.handleBackDropClick}>
-        <ModalWindows>
-          <img src={this.props.modalImage} alt="LargeImage" />
-        </ModalWindows>
-      </Overlay>
-    );
-  }
+  return (
+    <Overlay onClick={handleBackDropClick}>
+      <ModalWindows>
+        <img src={modalImage} alt="LargeImage" />
+      </ModalWindows>
+    </Overlay>
+  );
 }
 
 Modal.propTypes = {
